@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PUMA SNEAKER ARCHIVE</title>
+
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+
+  <header class="header">
+    <p class="header__label">PERSONAL SNEAKER DATABASE</p>
+    <h1>PUMA SNEAKER ARCHIVE</h1>
+    <p>STRUCTURE / TECHNOLOGY / RETRO FUTURE</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p class="section-number">00 / CONCEPT</p>
+
+      <h2>なぜ、このスニーカーに惹かれるのか。</h2>
+
+      <p>
+        いろいろな素材やパーツが重なった複雑な構造。
+        外から見えるテクノロジー。
+        そして90〜2000年代のランニングシューズが描いた、
+        少し懐かしい未来。
+      </p>
+
+      <p>
+        ゴツいから好きなのではなく、
+        「どうしてこんな形になっているんだろう？」
+        と眺めたくなる靴が好き。
+      </p>
+    </section>
+
+    <section class="archive">
+      <div class="section-heading">
+        <div>
+          <p class="section-number">01 / ARCHIVE</p>
+          <h2>SNEAKER DATABASE</h2>
+        </div>
+
+        <p id="sneaker-count"></p>
+      </div>
+<div class="archive-tools">
+
+  <div class="search-box">
+    <label for="search-input">SEARCH DATABASE</label>
+
+    <input
+      type="search"
+      id="search-input"
+      placeholder="MODEL / SERIES / TAG"
+      autocomplete="off"
+    >
+  </div>
+
+  <div class="filter-buttons">
+    <button class="filter-button active" data-series="ALL">
+      ALL
+    </button>
+
+    <button class="filter-button" data-series="RS">
+      RS
+    </button>
+
+    <button class="filter-button" data-series="CELL">
+      CELL
+    </button>
+
+    <button class="filter-button" data-series="THUNDER">
+      THUNDER
+    </button>
+
+  </div>
+  <div class="sort-box">
+  <label for="sort-select">SORT BY</label>
+
+  <select id="sort-select">
+    <option value="number">NUMBER</option>
+    <option value="score">MY SCORE</option>
+    <option value="year">YEAR</option>
+    <option value="name">NAME</option>
+  </select>
+</div>
+
+</div>
+
+<div id="sneaker-grid" class="sneaker-grid"></div>
+   
+    </section>
+  </main>
+
+  <!-- Sneaker Detail Modal -->
+<div
+  id="sneaker-modal"
+  class="modal"
+  aria-hidden="true"
+>
+  <div class="modal__backdrop" data-modal-close></div>
+
+  <div
+    class="modal__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <button
+      class="modal__close"
+      type="button"
+      data-modal-close
+      aria-label="詳細を閉じる"
+    >
+      ×
+    </button>
+
+    <!-- あとでJavaScriptが中身を生成する -->
+    <div id="modal-content">
+      <p>MODAL TEST</p>
+      <h2 id="modal-title">RS-X</h2>
+      <p>ここにスニーカーの詳細が入ります。</p>
+    </div>
+  </div>
+</div>
+
+  <script src="./js/sneakers.js"></script>
+  <script src="./js/app.js"></script>
+
+</body>
+</html>
