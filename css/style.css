@@ -617,3 +617,391 @@ main {
   }
 
 }
+
+.compare-tool {
+  margin: 30px 0 50px;
+  padding: 25px;
+  border: 1px solid #111;
+}
+
+.compare-tool__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.compare-tool__label,
+#compare-status {
+  font-family: monospace;
+  font-size: 0.7rem;
+}
+
+.compare-tool__heading h2 {
+  margin: 5px 0 0;
+  font-size: 1.5rem;
+}
+
+.compare-selection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.compare-slot {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px;
+  border: 1px solid #ccc;
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.compare-button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 18px;
+  border: 1px solid #111;
+  background: #111;
+  color: #fff;
+  font-family: monospace;
+  cursor: pointer;
+}
+
+.compare-button:disabled {
+  background: transparent;
+  color: #999;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.compare-select {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  background: #fff;
+  color: #111;
+  font-family: monospace;
+  cursor: pointer;
+}
+
+.compare-select:hover {
+  background: #111;
+  color: #fff;
+}
+
+.compare-select.is-selected {
+  background: #111;
+  color: #fff;
+}
+
+.compare-result {
+  margin: 40px 0 70px;
+  padding: 30px;
+  border: 1px solid #111;
+}
+
+.comparison-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #111;
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+#close-comparison {
+  border: 0;
+  background: transparent;
+  font-family: monospace;
+  cursor: pointer;
+}
+
+.comparison-models {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: center;
+  gap: 30px;
+  padding-top: 40px;
+}
+
+.comparison-model h2 {
+  min-height: 2.4em;
+  margin: 10px 0 20px;
+  font-size: 2rem;
+}
+
+.comparison-model img {
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+}
+
+.comparison-vs {
+  text-align: center;
+  font-family: monospace;
+}
+
+.comparison-score {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #ccc;
+}
+
+.comparison-score span {
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.comparison-score strong {
+  font-size: 2.5rem;
+}
+
+@media (max-width: 700px) {
+  .comparison-models {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-vs {
+    padding: 10px 0;
+  }
+}
+
+.comparison-dna {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid #111;
+}
+
+.comparison-section-title {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.comparison-section-title span {
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.comparison-section-title h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.comparison-dna-list {
+  border-top: 1px solid #ccc;
+}
+
+.comparison-dna-row {
+  display: grid;
+  grid-template-columns: 1fr 160px 1fr;
+  align-items: center;
+  gap: 25px;
+
+  padding: 18px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.comparison-dna-value {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.comparison-dna-value.left {
+  justify-content: flex-end;
+}
+
+.comparison-dna-value.right {
+  justify-content: flex-start;
+}
+
+.comparison-dna-label {
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.comparison-dna-bar {
+  display: grid;
+  grid-template-columns: repeat(5, 25px);
+  gap: 4px;
+}
+
+.comparison-dna-block {
+  height: 10px;
+  border: 1px solid #111;
+}
+
+.comparison-dna-block.active {
+  background: #111;
+}
+
+.comparison-rating {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid #111;
+}
+
+.comparison-rating-list {
+  border-top: 1px solid #ccc;
+}
+
+.comparison-rating-row {
+  display: grid;
+  grid-template-columns: 1fr 160px 1fr;
+  align-items: center;
+  gap: 25px;
+
+  padding: 18px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.comparison-rating-value {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.comparison-rating-value.left {
+  justify-content: flex-end;
+}
+
+.comparison-rating-value.right {
+  justify-content: flex-start;
+}
+
+.comparison-rating-value span {
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.comparison-rating-value strong {
+  min-width: 20px;
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.comparison-rating-label {
+  text-align: center;
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 700px) {
+
+  .comparison-dna-row,
+  .comparison-rating-row {
+    grid-template-columns: 1fr 110px 1fr;
+    gap: 10px;
+  }
+
+  .comparison-dna-bar {
+    grid-template-columns: repeat(5, 12px);
+    gap: 2px;
+  }
+
+  .comparison-rating-value {
+    gap: 5px;
+  }
+
+  .comparison-rating-value span {
+    font-size: 0.7rem;
+    letter-spacing: 0;
+  }
+
+  .comparison-dna-label,
+  .comparison-rating-label {
+    font-size: 0.6rem;
+  }
+}
+
+.clear-compare-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 12px;
+
+  border: 0;
+  background: transparent;
+
+  color: #666;
+
+  font-family: monospace;
+  font-size: 0.7rem;
+
+  cursor: pointer;
+}
+
+.clear-compare-button:hover {
+  color: #111;
+  text-decoration: underline;
+}
+
+.comparison-final {
+  margin-top: 50px;
+  padding-top: 30px;
+  border-top: 1px solid #111;
+}
+
+.final-score-grid {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center;
+
+  padding: 40px 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #111;
+}
+
+.final-score-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.final-score-item span {
+  min-height: 2em;
+
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.final-score-item strong {
+  margin-top: 15px;
+
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 1;
+}
+
+.final-score-item small {
+  margin-top: 10px;
+
+  font-family: monospace;
+  font-size: 0.8rem;
+}
+
+.final-score-vs {
+  text-align: center;
+
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 700px) {
+  .final-score-grid {
+    grid-template-columns: 1fr 40px 1fr;
+  }
+
+  .final-score-item strong {
+    font-size: 3rem;
+  }
+}

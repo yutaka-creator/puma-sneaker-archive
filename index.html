@@ -59,24 +59,7 @@
     >
   </div>
 
-  <div class="filter-buttons">
-    <button class="filter-button active" data-series="ALL">
-      ALL
-    </button>
-
-    <button class="filter-button" data-series="RS">
-      RS
-    </button>
-
-    <button class="filter-button" data-series="CELL">
-      CELL
-    </button>
-
-    <button class="filter-button" data-series="THUNDER">
-      THUNDER
-    </button>
-
-  </div>
+  <div class="filter-buttons" id="filter-buttons"></div>
   <div class="sort-box">
   <label for="sort-select">SORT BY</label>
 
@@ -86,6 +69,48 @@
     <option value="year">YEAR</option>
     <option value="name">NAME</option>
   </select>
+
+  <section class="compare-tool">
+  <div class="compare-tool__heading">
+    <div>
+      <span class="compare-tool__label">COMPARE MODE</span>
+      <h2>COMPARE SNEAKERS</h2>
+    </div>
+
+    <span id="compare-status">0 / 2 SELECTED</span>
+  </div>
+
+  <div id="compare-selection" class="compare-selection">
+    <div class="compare-slot">
+      <span>01</span>
+      <strong>SELECT SNEAKER</strong>
+    </div>
+
+    <div class="compare-slot">
+      <span>02</span>
+      <strong>SELECT SNEAKER</strong>
+    </div>
+  </div>
+
+  <button
+    id="compare-button"
+    class="compare-button"
+    type="button"
+    disabled
+  >
+    COMPARE →
+  </button>
+
+  <button
+  id="clear-compare-button"
+  class="clear-compare-button"
+  type="button"
+>
+  CLEAR SELECTION
+</button>
+</section>
+<section id="compare-result" class="compare-result" hidden>
+</section>
 </div>
 
 </div>

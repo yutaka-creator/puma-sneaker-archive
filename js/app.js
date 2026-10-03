@@ -2,7 +2,7 @@ const sneakerGrid = document.querySelector("#sneaker-grid");
 const sneakerCount = document.querySelector("#sneaker-count");
 
 const searchInput = document.querySelector("#search-input");
-const filterButtons = document.querySelectorAll(".filter-button");
+const filterButtonsContainer = document.querySelector("#filter-buttons");
 
 const sortSelect = document.querySelector("#sort-select");
 const sneakerModal = document.querySelector("#sneaker-modal");
@@ -15,22 +15,29 @@ const scoreLabels = {
   color: "COLOR",
   retroRunning: "RETRO RUNNING",
   wantToWear: "WANT TO WEAR",
-  collection: "COLLECTION"
+  collection: "COLLECTION",
 };
 const dnaLabels = {
   structure: "STRUCTURE",
   tech: "TECH",
   retroFuture: "RETRO FUTURE",
-  chunky: "CHUNKY"
+  chunky: "CHUNKY",
 };
+const clearCompareButton = document.querySelector("#clear-compare-button");
+const compareResult = document.querySelector("#compare-result");
 
+const compareStatus = document.querySelector("#compare-status");
+
+const compareSelection = document.querySelector("#compare-selection");
+
+const compareButton = document.querySelector("#compare-button");
 
 let sortType = "number";
 let selectedSeries = "ALL";
 let searchKeyword = "";
+let compareSneakers = [];
 
 function calculateAverage(scores) {
-
   const values = Object.values(scores);
 
   const total = values.reduce((sum, score) => {
@@ -40,33 +47,30 @@ function calculateAverage(scores) {
   return (total / values.length).toFixed(2);
 }
 
+function calculateTotal(scores) {
+  return Object.values(scores).reduce((total, score) => total + score, 0);
+}
 
 function createStars(score) {
-
   let stars = "";
 
   for (let i = 1; i <= 5; i++) {
-
     if (i <= score) {
       stars += "★";
     } else {
       stars += "☆";
     }
-
   }
 
   return stars;
 }
 
-
 function createSneakerCard(sneaker) {
-
   const average = calculateAverage(sneaker.scores);
 
   const tags = sneaker.tags
-    .map(tag => `<span class="tag">${tag}</span>`)
+    .map((tag) => `<span class="tag">${tag}</span>`)
     .join("");
-
 
   return `
   <article
@@ -148,29 +152,28 @@ function createSneakerCard(sneaker) {
 
       </div>
 
+      <button
+  class="compare-select"
+  type="button"
+  data-compare-id="${sneaker.id}"
+>
+  + COMPARE
+</button>
+
     </article>
   `;
 }
 
-
 function renderSneakers(list = sneakers) {
+  sneakerGrid.innerHTML = list.map(createSneakerCard).join("");
 
-  sneakerGrid.innerHTML = list
-    .map(createSneakerCard)
-    .join("");
-
-  sneakerCount.textContent =
-    `${list.length} MODELS`;
-
+  sneakerCount.textContent = `${list.length} MODELS`;
 }
 
 function updateSneakers() {
-
   const filteredSneakers = sneakers.filter((sneaker) => {
-
     const matchesSeries =
-      selectedSeries === "ALL" ||
-      sneaker.series === selectedSeries;
+      selectedSeries === "ALL" || sneaker.series === selectedSeries;
 
     const searchableText = `
       ${sneaker.name}
@@ -179,60 +182,46 @@ function updateSneakers() {
       ${sneaker.year}
     `.toLowerCase();
 
-    const matchesSearch =
-      searchableText.includes(searchKeyword);
+    const matchesSearch = searchableText.includes(searchKeyword);
 
     return matchesSeries && matchesSearch;
-
   });
 
-
   // 絞り込んだ後に並び替える
-  const sortedSneakers =
-    sortSneakers(filteredSneakers);
+  const sortedSneakers = sortSneakers(filteredSneakers);
 
   // 並び替えたデータを表示
   renderSneakers(sortedSneakers);
-
 }
 searchInput.addEventListener("input", (event) => {
-
-  searchKeyword =
-    event.target.value
-      .trim()
-      .toLowerCase();
+  searchKeyword = event.target.value.trim().toLowerCase();
 
   updateSneakers();
-
 });
 
-filterButtons.forEach((button) => {
+filterButtonsContainer.addEventListener("click", (event) => {
+  const button = event.target.closest(".filter-button");
 
-  button.addEventListener("click", () => {
+  if (!button) return;
 
-    selectedSeries = button.dataset.series;
+  selectedSeries = button.dataset.series;
 
+  const filterButtons =
+    filterButtonsContainer.querySelectorAll(".filter-button");
 
-    filterButtons.forEach((btn) => {
-      btn.classList.remove("active");
-    });
-
-
-    button.classList.add("active");
-
-
-    updateSneakers();
-
+  filterButtons.forEach((btn) => {
+    btn.classList.remove("active");
   });
 
+  button.classList.add("active");
+
+  updateSneakers();
 });
 
 function sortSneakers(list) {
-
   const sortedList = [...list];
 
   switch (sortType) {
-
     case "score":
       sortedList.sort((a, b) => {
         return (
@@ -242,13 +231,11 @@ function sortSneakers(list) {
       });
       break;
 
-
     case "year":
       sortedList.sort((a, b) => {
         return b.year - a.year;
       });
       break;
-
 
     case "name":
       sortedList.sort((a, b) => {
@@ -256,19 +243,16 @@ function sortSneakers(list) {
       });
       break;
 
-
     default:
       sortedList.sort((a, b) => {
         return Number(a.number) - Number(b.number);
       });
-
   }
 
   return sortedList;
 }
 
 function openSneakerModal(sneakerId) {
-
   const sneaker = sneakers.find((item) => {
     return item.id === sneakerId;
   });
@@ -367,17 +351,13 @@ function openSneakerModal(sneakerId) {
 }
 
 function closeSneakerModal() {
-
   sneakerModal.classList.remove("is-open");
   sneakerModal.setAttribute("aria-hidden", "true");
-
 }
 
 function createScoreRows(scores) {
-
   return Object.entries(scores)
     .map(([key, score]) => {
-
       const label = scoreLabels[key];
 
       return `
@@ -397,28 +377,20 @@ function createScoreRows(scores) {
 
         </div>
       `;
-
     })
     .join("");
 }
 
 function createDnaRows(dna) {
-
   return Object.entries(dna)
     .map(([key, value]) => {
-
       const label = dnaLabels[key];
 
-      const bars = Array.from(
-        { length: 5 },
-        (_, index) => {
-          return `
-            <span class="dna-block ${
-              index < value ? "active" : ""
-            }"></span>
+      const bars = Array.from({ length: 5 }, (_, index) => {
+        return `
+            <span class="dna-block ${index < value ? "active" : ""}"></span>
           `;
-        }
-      ).join("");
+      }).join("");
 
       return `
         <div class="dna-row">
@@ -437,48 +409,354 @@ function createDnaRows(dna) {
 
         </div>
       `;
-
     })
     .join("");
 }
 
+function createFilterButtons() {
+  const seriesList = [
+    "ALL",
+    ...new Set(sneakers.map((sneaker) => sneaker.series)),
+  ];
+
+  filterButtonsContainer.innerHTML = seriesList
+    .map((series) => {
+      return `
+          <button
+            class="filter-button ${series === "ALL" ? "active" : ""}"
+            data-series="${series}"
+          >
+            ${series}
+          </button>
+        `;
+    })
+    .join("");
+}
+
+function toggleCompareSneaker(sneakerId) {
+  const isSelected = compareSneakers.includes(sneakerId);
+
+  if (isSelected) {
+    compareSneakers = compareSneakers.filter((id) => id !== sneakerId);
+  } else {
+    if (compareSneakers.length >= 2) return;
+
+    compareSneakers.push(sneakerId);
+  }
+
+  updateCompareUI();
+}
+
+function updateCompareUI() {
+  compareStatus.textContent = `${compareSneakers.length} / 2 SELECTED`;
+
+  const selectedSneakers = compareSneakers
+    .map((id) => sneakers.find((sneaker) => sneaker.id === id))
+    .filter(Boolean);
+
+  compareSelection.innerHTML = [0, 1]
+    .map((index) => {
+      const sneaker = selectedSneakers[index];
+
+      if (!sneaker) {
+        return `
+          <div class="compare-slot">
+            <span>0${index + 1}</span>
+            <strong>SELECT SNEAKER</strong>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="compare-slot">
+          <span>0${index + 1}</span>
+          <strong>${sneaker.name}</strong>
+        </div>
+      `;
+    })
+    .join("");
+
+  compareButton.disabled = compareSneakers.length !== 2;
+
+  document.querySelectorAll(".compare-select").forEach((button) => {
+    const isSelected = compareSneakers.includes(button.dataset.compareId);
+
+    button.classList.toggle("is-selected", isSelected);
+
+    button.textContent = isSelected ? "✓ SELECTED" : "+ COMPARE";
+  });
+}
+
+function renderComparison(sneakerA, sneakerB) {
+  const scoreA = calculateAverage(sneakerA.scores);
+  const scoreB = calculateAverage(sneakerB.scores);
+  const totalA = calculateTotal(sneakerA.scores);
+  const totalB = calculateTotal(sneakerB.scores);
+
+  compareResult.innerHTML = `
+    <div class="comparison-header">
+      <span>COMPARE RESULT</span>
+      <button
+        id="close-comparison"
+        type="button"
+      >
+        × CLOSE
+      </button>
+    </div>
+
+    <div class="comparison-models">
+
+      <div class="comparison-model">
+        <span>${sneakerA.number} / ${sneakerA.year}</span>
+
+        <h2>${sneakerA.name}</h2>
+
+        ${
+          sneakerA.image
+            ? `<img src="${sneakerA.image}" alt="${sneakerA.name}">`
+            : `<div class="comparison-no-image">NO IMAGE</div>`
+        }
+
+        <div class="comparison-score">
+          <span>MY SCORE</span>
+          <strong>${scoreA}</strong>
+        </div>
+      </div>
+
+      <div class="comparison-vs">
+        VS
+      </div>
+
+      <div class="comparison-model">
+        <span>${sneakerB.number} / ${sneakerB.year}</span>
+
+        <h2>${sneakerB.name}</h2>
+
+        ${
+          sneakerB.image
+            ? `<img src="${sneakerB.image}" alt="${sneakerB.name}">`
+            : `<div class="comparison-no-image">NO IMAGE</div>`
+        }
+
+        <div class="comparison-score">
+          <span>MY SCORE</span>
+          <strong>${scoreB}</strong>
+        </div>
+      </div>
+      
+
+    </div>
+<section class="comparison-dna">
+
+  <div class="comparison-section-title">
+    <span>01</span>
+    <h3>SNEAKER DNA</h3>
+  </div>
+
+  <div class="comparison-dna-list">
+    ${createComparisonDna(sneakerA, sneakerB)}
+  </div>
+
+</section>
+
+<section class="comparison-rating">
+
+  <div class="comparison-section-title">
+    <span>02</span>
+    <h3>MY RATING</h3>
+  </div>
+
+  <div class="comparison-rating-list">
+    ${createComparisonScores(sneakerA, sneakerB)}
+  </div>
+
+</section>
+<section class="comparison-final">
+
+  <div class="comparison-section-title">
+    <span>03</span>
+    <h3>FINAL SCORE</h3>
+  </div>
+
+  <div class="final-score-grid">
+
+    <div class="final-score-item">
+      <span>${sneakerA.name}</span>
+
+      <strong>${scoreA}</strong>
+
+      <small>
+        ${totalA} / 35
+      </small>
+    </div>
+
+    <div class="final-score-vs">
+      VS
+    </div>
+
+    <div class="final-score-item">
+      <span>${sneakerB.name}</span>
+
+      <strong>${scoreB}</strong>
+
+      <small>
+        ${totalB} / 35
+      </small>
+    </div>
+
+  </div>
+
+</section>
+  `;
+
+  compareResult.hidden = false;
+
+  compareResult.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
+  const closeComparisonButton = document.querySelector("#close-comparison");
+
+  closeComparisonButton.addEventListener("click", () => {
+    compareResult.hidden = true;
+  });
+}
+
+function createComparisonDna(sneakerA, sneakerB) {
+  return Object.keys(dnaLabels)
+    .map((key) => {
+      const label = dnaLabels[key];
+
+      const valueA = sneakerA.dna[key];
+      const valueB = sneakerB.dna[key];
+
+      return `
+        <div class="comparison-dna-row">
+
+          <div class="comparison-dna-value left">
+            <strong>${valueA}</strong>
+            <div class="comparison-dna-bar">
+              ${createDnaBlocks(valueA)}
+            </div>
+          </div>
+
+          <span class="comparison-dna-label">
+            ${label}
+          </span>
+
+          <div class="comparison-dna-value right">
+            <div class="comparison-dna-bar">
+              ${createDnaBlocks(valueB)}
+            </div>
+            <strong>${valueB}</strong>
+          </div>
+
+        </div>
+      `;
+    })
+    .join("");
+}
+
+function createDnaBlocks(value) {
+  return Array.from({ length: 5 }, (_, index) => {
+    return `
+      <span
+        class="comparison-dna-block ${index < value ? "active" : ""}"
+      ></span>
+    `;
+  }).join("");
+}
+
+function createComparisonScores(sneakerA, sneakerB) {
+  return Object.keys(scoreLabels)
+    .map((key) => {
+      const label = scoreLabels[key];
+
+      const scoreA = sneakerA.scores[key];
+      const scoreB = sneakerB.scores[key];
+
+      return `
+        <div class="comparison-rating-row">
+
+          <div class="comparison-rating-value left">
+            <span>${createStars(scoreA)}</span>
+            <strong>${scoreA}</strong>
+          </div>
+
+          <span class="comparison-rating-label">
+            ${label}
+          </span>
+
+          <div class="comparison-rating-value right">
+            <strong>${scoreB}</strong>
+            <span>${createStars(scoreB)}</span>
+          </div>
+
+        </div>
+      `;
+    })
+    .join("");
+}
 
 sneakerGrid.addEventListener("click", (event) => {
+  const compareButton = event.target.closest(".compare-select");
+
+  if (compareButton) {
+    const sneakerId = compareButton.dataset.compareId;
+
+    toggleCompareSneaker(sneakerId);
+
+    return;
+  }
 
   const card = event.target.closest(".sneaker-card");
 
-  if (!card) {
-    return;
-  }
+  if (!card) return;
 
   const sneakerId = card.dataset.sneakerId;
 
   openSneakerModal(sneakerId);
-
 });
 
 modalCloseButtons.forEach((button) => {
-
   button.addEventListener("click", () => {
     closeSneakerModal();
   });
-
 });
 
 document.addEventListener("keydown", (event) => {
-
   if (event.key === "Escape") {
     closeSneakerModal();
   }
-
 });
 sortSelect.addEventListener("change", (event) => {
-
   sortType = event.target.value;
 
   updateSneakers();
-
 });
 
+compareButton.addEventListener("click", () => {
+  if (compareSneakers.length !== 2) return;
 
+  const sneakerA = sneakers.find(
+    (sneaker) => sneaker.id === compareSneakers[0],
+  );
+
+  const sneakerB = sneakers.find(
+    (sneaker) => sneaker.id === compareSneakers[1],
+  );
+
+  if (!sneakerA || !sneakerB) return;
+
+  renderComparison(sneakerA, sneakerB);
+});
+
+clearCompareButton.addEventListener("click", () => {
+  compareSneakers = [];
+
+  updateCompareUI();
+
+  compareResult.hidden = true;
+});
+createFilterButtons();
 updateSneakers();
