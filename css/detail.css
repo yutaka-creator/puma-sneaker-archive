@@ -283,3 +283,58 @@
   }
 
 }
+
+/* ========================================
+   COLORWAYS
+======================================== */
+
+.colorway-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.colorway-item {
+  padding: 12px;
+
+  border: 1px solid #ccc;
+  background: #fff;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.colorway-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+
+  margin-bottom: 12px;
+}
+
+.colorway-name {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.colorway-style {
+  display: block;
+  margin-top: 5px;
+
+  font-family: monospace;
+  font-size: 0.7rem;
+  opacity: 0.55;
+}
+
+.colorway-item:hover {
+  border-color: #111;
+}
+
+@media (max-width: 700px) {
+  .colorway-list {
+    grid-template-columns: 1fr;
+  }
+}

@@ -31,6 +31,10 @@ const compareStatus = document.querySelector("#compare-status");
 const compareSelection = document.querySelector("#compare-selection");
 
 const compareButton = document.querySelector("#compare-button");
+const pagination = document.querySelector("#pagination");
+
+const ITEMS_PER_PAGE = 12;
+let currentPage = 1;
 
 let sortType = "number";
 let selectedSeries = "ALL";
@@ -173,7 +177,8 @@ function renderSneakers(list = sneakers) {
 function updateSneakers() {
   const filteredSneakers = sneakers.filter((sneaker) => {
     const matchesSeries =
-      selectedSeries === "ALL" || sneaker.series === selectedSeries;
+      selectedSeries === "ALL" ||
+      sneaker.series === selectedSeries;
 
     const searchableText = `
       ${sneaker.name}
@@ -182,16 +187,93 @@ function updateSneakers() {
       ${sneaker.year}
     `.toLowerCase();
 
-    const matchesSearch = searchableText.includes(searchKeyword);
+    const matchesSearch =
+      searchableText.includes(searchKeyword);
 
     return matchesSeries && matchesSearch;
   });
 
-  // 絞り込んだ後に並び替える
-  const sortedSneakers = sortSneakers(filteredSneakers);
+  // 並び替え
+  const sortedSneakers =
+    sortSneakers(filteredSneakers);
 
-  // 並び替えたデータを表示
-  renderSneakers(sortedSneakers);
+  // 全ページ数
+  const totalPages = Math.ceil(
+    sortedSneakers.length / ITEMS_PER_PAGE
+  );
+
+  // ページ数を超えないようにする
+  if (currentPage > totalPages) {
+    currentPage = Math.max(totalPages, 1);
+  }
+
+  // 今のページに表示する12足
+  const start =
+    (currentPage - 1) * ITEMS_PER_PAGE;
+
+  const end =
+    start + ITEMS_PER_PAGE;
+
+  const pageSneakers =
+    sortedSneakers.slice(start, end);
+
+  // カード表示
+  renderSneakers(pageSneakers);
+
+  // 件数は検索結果全体を表示
+  sneakerCount.textContent =
+    `${sortedSneakers.length} MODELS`;
+
+  // ページ番号を作る
+  renderPagination(totalPages);
+}
+
+function renderPagination(totalPages) {
+  // 1ページしかない場合は非表示
+  if (totalPages <= 1) {
+    pagination.innerHTML = "";
+    return;
+  }
+
+  let html = "";
+
+  // PREV
+  html += `
+    <button
+      class="pagination-button"
+      data-page="${currentPage - 1}"
+      ${currentPage === 1 ? "disabled" : ""}
+    >
+      ← PREV
+    </button>
+  `;
+
+  // ページ番号
+  for (let page = 1; page <= totalPages; page++) {
+    html += `
+      <button
+        class="pagination-button ${
+          page === currentPage ? "active" : ""
+        }"
+        data-page="${page}"
+      >
+        ${page}
+      </button>
+    `;
+  }
+
+  // NEXT
+  html += `
+    <button
+      class="pagination-button"
+      data-page="${currentPage + 1}"
+      ${currentPage === totalPages ? "disabled" : ""}
+    >
+      NEXT →
+    </button>
+  `;
+
+  pagination.innerHTML = html;
 }
 searchInput.addEventListener("input", (event) => {
   searchKeyword = event.target.value.trim().toLowerCase();
@@ -757,6 +839,22 @@ clearCompareButton.addEventListener("click", () => {
   updateCompareUI();
 
   compareResult.hidden = true;
+});
+
+pagination.addEventListener("click", (event) => {
+  const button = event.target.closest(".pagination-button");
+
+  if (!button || button.disabled) return;
+
+  currentPage = Number(button.dataset.page);
+
+  updateSneakers();
+
+  // ページを切り替えたら一覧の上まで戻る
+  document.querySelector(".archive").scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
 });
 createFilterButtons();
 updateSneakers();
